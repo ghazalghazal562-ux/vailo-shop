@@ -1,4 +1,4 @@
-<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vailo Admin</title><style>
+<!doctype html><html lang="fa" dir="rtl"><head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vailo Admin</title><style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');:root{--burg:#772044;--wine:#4d122c;--pink:#f5c7d9;--bg:#fff6fa;--line:#ecdce4;--muted:#947b8a}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#35212b;font-family:Vazirmatn,sans-serif}header{background:var(--wine);color:#fff;padding:18px 22px;position:relative}header .adminhead{display:flex;align-items:center;justify-content:space-between;gap:12px}header .adminhamb{width:40px;height:40px;border-radius:12px;background:#ffffff20;border:1px solid #ffffff35;color:white;display:grid;align-content:center;gap:5px;padding:0 11px;cursor:pointer}header .adminhamb span{height:2px;background:white;border-radius:4px}header .adminnav{display:none;position:absolute;top:68px;right:20px;z-index:8;background:white;border:1px solid #ead8e3;box-shadow:0 14px 30px #250f1b22;border-radius:14px;padding:9px;min-width:220px}header .adminnav.open{display:grid;gap:6px;animation:navIn .3s ease}header .adminnav button{border:0;text-align:right;background:#fff;color:#772044;padding:10px 12px;border-radius:9px;cursor:pointer}header .adminnav button:hover{background:#f9e9f2}@keyframes navIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}header h1{font-size:21px;margin:0}header p{margin:4px 0 0;font-size:12px;color:#edd9e3}.wrap{max-width:1150px;margin:auto;padding:20px}.notice{background:#fff1f7;border:1px solid #e9c9db;color:#8a4968;border-radius:12px;padding:13px;font-size:12px;line-height:1.9;margin-bottom:17px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}.tab{border:1px solid var(--line);border-radius:10px;background:white;color:var(--burg);padding:10px 15px}.tab.active{background:var(--burg);color:white}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:15px;transition:opacity .55s ease,transform .65s cubic-bezier(.18,.82,.22,1)}.tabcontent .panel{animation:adminPanelIn .65s cubic-bezier(.18,.82,.22,1)}@keyframes adminPanelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.item{transition:transform .55s ease,box-shadow .55s ease}.panel h2{margin:0 0 15px;font-size:17px;color:var(--wine)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:#79556b}.field input,.field textarea,.field select{padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;width:100%;outline:none}.field input:focus,.field textarea:focus{border-color:#b36b91}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.btn{border:0;border-radius:10px;padding:11px 16px;background:var(--burg);color:white;font:inherit;font-size:12px;cursor:pointer}.btn.secondary{background:#f7e5ef;color:var(--burg)}.btn.danger{background:#8e3a50}.list{display:grid;gap:9px}.item{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:12px}.item small{display:block;color:var(--muted);margin-top:4px}.itemactions{display:flex;gap:7px;flex-wrap:wrap}.toggleline{display:flex;gap:8px;align-items:center;font-size:12px;margin-top:5px}.productform{margin-top:15px}.orders{overflow:auto}.order{border:1px solid var(--line);padding:13px;border-radius:12px;margin-bottom:10px;font-size:12px}.orderline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.order select{padding:8px;border:1px solid var(--line);border-radius:9px}.empty{color:var(--muted);font-size:12px}.small{font-size:11px;color:var(--muted)}.uploadbox{border:1px dashed #d9afc5;background:#fff8fc;border-radius:13px;padding:14px}.uploadbtn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;background:#f6e4ef;color:var(--burg);padding:10px 13px;font-size:12px;cursor:pointer}.imagegrid{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.imageitem{width:100px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:7px;display:grid;gap:6px}.imageitem img{width:84px;height:84px;object-fit:cover;border-radius:8px}.imageitem button{padding:6px 4px;font-size:10px;border-radius:8px;background:#f6e5ef;color:var(--burg)}.imageitem.cover{border:2px solid var(--burg)}.imageitem .coverlabel{font-size:10px;text-align:center;color:var(--burg)}@media(max-width:650px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.wrap{padding:12px}.panel{padding:13px}}
 .orderfilters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;position:sticky;top:6px;z-index:4;background:#fff8fc;padding:8px;border:1px solid #f0dfe8;border-radius:14px}.orderfilters .btn{font-size:12px;padding:9px 12px}.ordercard{background:#fff;border:1px solid #ecdce4;border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 5px 18px #60203c08}.ordercard h3{font-size:14px;margin:0 0 8px;color:#4d122c}.orderdetail{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;line-height:1.9}.orderdetail .full{grid-column:1/-1}.orderitems{background:#fff6fa;border-radius:12px;padding:10px;margin:10px 0;font-size:12px;line-height:1.9}.orderitems strong{color:#772044}.orderactions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.orderactions select{padding:8px;border:1px solid #ecdce4;border-radius:10px}.orderdelete{border:0;background:#ffe8f0;color:#772044;border-radius:10px;padding:8px 12px}.orderempty{padding:24px;text-align:center;color:#9b7f8e;background:#fff6fa;border-radius:14px}@media(max-width:560px){.orderdetail{grid-template-columns:1fr}.orderdetail .full{grid-column:auto}}</style></head><body><header><div class="adminhead"><div><h1>Vailo Admin ♡</h1><p>مدیریت محصولات، دسته‌بندی‌ها، حال‌وهوا و سفارش‌ها</p></div><button class="adminhamb" id="adminMenuBtn" aria-label="منوی پنل"><span></span><span></span><span></span></button></div><nav class="adminnav" id="adminNav"><button data-goto="products">محصولات</button><button data-goto="categories">دسته‌بندی‌ها</button><button data-goto="moods">حال‌وهوای امروز</button><button data-goto="orders">سفارش‌ها</button><button data-goto="menuSettings">تنظیم منو</button><a href="index.html" style="display:block;text-align:center;padding:10px;color:#772044">مشاهده فروشگاه</a></nav></header><main class="wrap"><div class="notice">این پنل در حال حاضر از ذخیره‌سازی مرورگر (Local Storage) استفاده می‌کند. برای انتشار واقعی، دسترسی ادمین و اطلاعات مشتری باید با بک‌اند و احراز هویت امن محافظت شوند. داده‌های این نسخه روی همین مرورگر مشترک با صفحه فروشگاه ذخیره می‌شوند.</div><div class="tabs"><button class="tab active" data-tab="products">محصولات</button><button class="tab" data-tab="categories">دسته‌بندی‌ها</button><button class="tab" data-tab="moods">حال‌وهوای امروز</button><button class="tab" data-tab="orders">سفارش‌ها</button><button class="tab" data-tab="menuSettings">تنظیم منو</button><a class="tab" href="index.html">مشاهده فروشگاه</a></div>
 <section id="products" class="tabcontent"><div class="panel"><h2>افزودن / ویرایش محصول</h2><form id="productForm"><div class="grid"><div class="field"><label>نام محصول *</label><input id="name" required></div><div class="field"><label>دسته‌بندی *</label><select id="category" required></select></div><div class="field"><label>قیمت (تومان) *</label><input id="price" type="number" min="0" required></div><div class="field"><label>تخفیف فعال؟</label><label class="toggleline"><input id="discount" type="checkbox"> فعال‌کردن قیمت قبلی</label></div><div class="field" id="oldPriceField" style="display:none"><label>قیمت قبلی (تومان)</label><input id="oldPrice" type="number" min="0"></div><div class="field full"><label>توضیحات محصول</label><textarea id="desc" rows="3"></textarea></div><div class="field full"><label>تصاویر محصول</label><div class="uploadbox"><label class="uploadbtn" for="imageUpload">♡ انتخاب عکس از گالری / فایل‌ها</label><input id="imageUpload" type="file" accept="image/*" multiple hidden><p class="small">چند عکس می‌تونی اضافه کنی. عکس کاور رو انتخاب کن؛ عکس‌های بعدی داخل صفحه محصول نمایش داده می‌شن.</p><div id="imagePreview" class="imagegrid"></div></div></div><div class="field"><label class="toggleline"><input id="best" type="checkbox"> نمایش در پرفروش‌های این هفته</label></div><div class="field"><label class="toggleline"><input id="new" type="checkbox"> نمایش در جدیدترین محصولات</label></div></div><div class="buttons"><button class="btn" type="submit">ذخیره محصول</button><button class="btn secondary" type="button" id="resetProduct">پاک‌کردن فرم</button></div></form></div><div class="panel"><h2>محصولات ثبت‌شده</h2><div id="productList" class="list"></div></div></section>
@@ -15,4 +15,96 @@ document.querySelectorAll('.tab').forEach(b=>b.dataset.tab&&b.addEventListener('
 function compressImage(file){return new Promise((resolve,reject)=>{let reader=new FileReader();reader.onload=()=>{let img=new Image();img.onload=()=>{let max=1100,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*scale),h=Math.round(img.height*scale),canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);resolve(canvas.toDataURL('image/jpeg',.82))};img.onerror=reject;img.src=reader.result};reader.onerror=reject;reader.readAsDataURL(file)})}
 document.getElementById('productForm').onsubmit=e=>{e.preventDefault();let p={id:editId||('prod-'+Date.now()),name:document.getElementById('name').value.trim(),category:document.getElementById('category').value,price:Number(document.getElementById('price').value),oldPrice:document.getElementById('discount').checked?Number(document.getElementById('oldPrice').value||0):0,desc:document.getElementById('desc').value.trim(),images:formImages.slice(),best:document.getElementById('best').checked,new:document.getElementById('new').checked};if(editId){db.products=db.products.map(x=>x.id===editId?p:x)}else db.products.unshift(p);save();clearform();renderProducts();alert('محصول ذخیره شد')};document.getElementById('resetProduct').onclick=clearform;document.getElementById('categoryForm').onsubmit=e=>{e.preventDefault();let c=document.getElementById('categoryName').value.trim();if(c&&!db.categories.includes(c)){db.categories.push(c);save();fillCategory();renderCats()}e.target.reset()};document.getElementById('moodForm').onsubmit=e=>{e.preventDefault();db.moods.push({name:document.getElementById('moodName').value.trim(),category:document.getElementById('moodCategory').value});save();renderMoods();e.target.reset()};fillCategory();renderProducts();renderCats();renderMoods();renderOrders();renderMenuItems();
 setInterval(()=>renderOrders(),60000);
-document.getElementById('menuItemForm').onsubmit=e=>{e.preventDefault();let label=document.getElementById('menuItemLabel').value.trim(),href=document.getElementById('menuItemHref').value.trim();if(label&&href){db.menuItems.push({label,href});save();renderMenuItems();e.target.reset()}};document.getElementById('adminMenuBtn').onclick=()=>document.getElementById('adminNav').classList.toggle('open');document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{let target=b.dataset.goto;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelector(`.tab[data-tab='${target}']`)?.classList.add('active');document.querySelectorAll('.tabcontent').forEach(x=>x.style.display='none');document.getElementById(target).style.display='block';document.getElementById('adminNav').classList.remove('open')});</script></body></html>
+document.getElementById('menuItemForm').onsubmit=e=>{e.preventDefault();let label=document.getElementById('menuItemLabel').value.trim(),href=document.getElementById('menuItemHref').value.trim();if(label&&href){db.menuItems.push({label,href});save();renderMenuItems();e.target.reset()}};document.getElementById('adminMenuBtn').onclick=()=>document.getElementById('adminNav').classList.toggle('open');document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{let target=b.dataset.goto;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelector(`.tab[data-tab='${target}']`)?.classList.add('active');document.querySelectorAll('.tabcontent').forEach(x=>x.style.display='none');document.getElementById(target).style.display='block';document.getElementById('adminNav').classList.remove('open')});</script></body><!-- ============ لاگین ادمین با Supabase ============ -->
+<div id="loginOverlay" style="position:fixed;inset:0;background:#fff6fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Vazirmatn,sans-serif;">
+  <div style="background:white;padding:40px 30px;border-radius:20px;box-shadow:0 10px 40px #00000015;max-width:380px;width:90%;text-align:center;">
+    <h2 style="color:#4d122c;margin-bottom:8px;">ورود به پنل ادمین</h2>
+    <p style="color:#947b8a;font-size:14px;margin-bottom:25px;">فقط مدیر اصلی می‌تواند وارد شود</p>
+    
+    <input id="adminEmail" type="email" placeholder="ایمیل خود را وارد کنید" 
+           style="width:100%;padding:14px;border:1px solid #ecdce4;border-radius:12px;margin-bottom:15px;font-size:15px;text-align:center;">
+    
+    <button id="sendMagicLink" 
+            style="width:100%;padding:14px;background:#772044;color:white;border:none;border-radius:12px;font-size:15px;cursor:pointer;font-weight:600;">
+      ارسال لینک ورود
+    </button>
+    
+    <p id="loginMessage" style="margin-top:18px;font-size:13px;color:#772044;display:none;"></p>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://avgytixrohsizihfmcvq.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2Z3l0aXhyb2hzaXppaGZtY3ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzUxNjIsImV4cCI6MjExMDk1MTE2Mn0.tdjWuecxM68w1oiiflPMpB5bIQ4slLA-M690NxSyyLk";
+  const ALLOWED_EMAIL = "Ghazalghazal562@gmail.com";
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // چک کردن وضعیت لاگین هنگام بارگذاری صفحه
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session && session.user.email.toLowerCase() === ALLOWED_EMAIL.toLowerCase()) {
+      // کاربر مجاز است → پنل را نشان بده
+      document.getElementById("loginOverlay").style.display = "none";
+    } else {
+      // یا لاگین نیست یا ایمیل مجاز نیست
+      if (session) {
+        // اگر با ایمیل دیگری لاگین کرده، خارجش کن
+        await supabase.auth.signOut();
+      }
+      document.getElementById("loginOverlay").style.display = "flex";
+    }
+  }
+
+  // ارسال لینک جادویی
+  document.getElementById("sendMagicLink").addEventListener("click", async () => {
+    const email = document.getElementById("adminEmail").value.trim().toLowerCase();
+    const messageEl = document.getElementById("loginMessage");
+
+    if (!email) {
+      messageEl.style.display = "block";
+      messageEl.style.color = "#c0392b";
+      messageEl.innerText = "لطفاً ایمیل را وارد کنید";
+      return;
+    }
+
+    if (email !== ALLOWED_EMAIL.toLowerCase()) {
+      messageEl.style.display = "block";
+      messageEl.style.color = "#c0392b";
+      messageEl.innerText = "این ایمیل مجاز به ورود نیست";
+      return;
+    }
+
+    messageEl.style.display = "block";
+    messageEl.style.color = "#772044";
+    messageEl.innerText = "در حال ارسال لینک...";
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: "https://vailo-shop.vercel.app/admin/",
+        shouldCreateUser: true
+      }
+    });
+
+    if (error) {
+      messageEl.style.color = "#c0392b";
+      messageEl.innerText = "خطا: " + error.message;
+    } else {
+      messageEl.style.color = "#27ae60";
+      messageEl.innerText = "لینک ورود به ایمیل شما ارسال شد. لطفاً ایمیل را چک کنید.";
+    }
+  });
+
+  // هنگام بارگذاری صفحه چک کن
+  checkAuth();
+
+  // اگر کاربر از لینک ایمیل برگشت، صفحه را رفرش کن
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_IN") {
+      checkAuth();
+    }
+  });
+</script>
+<!-- ============ پایان لاگین ============ --></html>
