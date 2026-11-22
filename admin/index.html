@@ -16,95 +16,42 @@ function compressImage(file){return new Promise((resolve,reject)=>{let reader=ne
 document.getElementById('productForm').onsubmit=e=>{e.preventDefault();let p={id:editId||('prod-'+Date.now()),name:document.getElementById('name').value.trim(),category:document.getElementById('category').value,price:Number(document.getElementById('price').value),oldPrice:document.getElementById('discount').checked?Number(document.getElementById('oldPrice').value||0):0,desc:document.getElementById('desc').value.trim(),images:formImages.slice(),best:document.getElementById('best').checked,new:document.getElementById('new').checked};if(editId){db.products=db.products.map(x=>x.id===editId?p:x)}else db.products.unshift(p);save();clearform();renderProducts();alert('محصول ذخیره شد')};document.getElementById('resetProduct').onclick=clearform;document.getElementById('categoryForm').onsubmit=e=>{e.preventDefault();let c=document.getElementById('categoryName').value.trim();if(c&&!db.categories.includes(c)){db.categories.push(c);save();fillCategory();renderCats()}e.target.reset()};document.getElementById('moodForm').onsubmit=e=>{e.preventDefault();db.moods.push({name:document.getElementById('moodName').value.trim(),category:document.getElementById('moodCategory').value});save();renderMoods();e.target.reset()};fillCategory();renderProducts();renderCats();renderMoods();renderOrders();renderMenuItems();
 setInterval(()=>renderOrders(),60000);
 document.getElementById('menuItemForm').onsubmit=e=>{e.preventDefault();let label=document.getElementById('menuItemLabel').value.trim(),href=document.getElementById('menuItemHref').value.trim();if(label&&href){db.menuItems.push({label,href});save();renderMenuItems();e.target.reset()}};document.getElementById('adminMenuBtn').onclick=()=>document.getElementById('adminNav').classList.toggle('open');document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{let target=b.dataset.goto;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelector(`.tab[data-tab='${target}']`)?.classList.add('active');document.querySelectorAll('.tabcontent').forEach(x=>x.style.display='none');document.getElementById(target).style.display='block';document.getElementById('adminNav').classList.remove('open')});</script></body><!-- ============ لاگین ادمین با Supabase ============ -->
-<div id="loginOverlay" style="position:fixed;inset:0;background:#fff6fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Vazirmatn,sans-serif;">
-  <div style="background:white;padding:40px 30px;border-radius:20px;box-shadow:0 10px 40px #00000015;max-width:380px;width:90%;text-align:center;">
-    <h2 style="color:#4d122c;margin-bottom:8px;">ورود به پنل ادمین</h2>
-    <p style="color:#947b8a;font-size:14px;margin-bottom:25px;">فقط مدیر اصلی می‌تواند وارد شود</p>
-    
-    <input id="adminEmail" type="email" placeholder="ایمیل خود را وارد کنید" 
-           style="width:100%;padding:14px;border:1px solid #ecdce4;border-radius:12px;margin-bottom:15px;font-size:15px;text-align:center;">
-    
-    <button id="sendMagicLink" 
-            style="width:100%;padding:14px;background:#772044;color:white;border:none;border-radius:12px;font-size:15px;cursor:pointer;font-weight:600;">
-      ارسال لینک ورود
-    </button>
-    
-    <p id="loginMessage" style="margin-top:18px;font-size:13px;color:#772044;display:none;"></p>
-  </div>
-</div>
-
-<script>
-  const SUPABASE_URL = "https://avgytixrohsizihfmcvq.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2Z3l0aXhyb2hzaXppaGZtY3ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzUxNjIsImV4cCI6MjExMDk1MTE2Mn0.tdjWuecxM68w1oiiflPMpB5bIQ4slLA-M690NxSyyLk";
-  const ALLOWED_EMAIL = "Ghazalghazal562@gmail.com";
-
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // چک کردن وضعیت لاگین هنگام بارگذاری صفحه
-  async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session && session.user.email.toLowerCase() === ALLOWED_EMAIL.toLowerCase()) {
-      // کاربر مجاز است → پنل را نشان بده
-      document.getElementById("loginOverlay").style.display = "none";
-    } else {
-      // یا لاگین نیست یا ایمیل مجاز نیست
-      if (session) {
-        // اگر با ایمیل دیگری لاگین کرده، خارجش کن
-        await supabase.auth.signOut();
-      }
-      document.getElementById("loginOverlay").style.display = "flex";
-    }
-  }
-
-  // ارسال لینک جادویی
-  document.getElementById("sendMagicLink").addEventListener("click", async () => {
+document.getElementById("verifyCode").addEventListener("click", async () => {
     const email = document.getElementById("adminEmail").value.trim().toLowerCase();
+    const token = document.getElementById("otpCode").value.trim();
     const messageEl = document.getElementById("loginMessage");
 
-    if (!email) {
+    if (!token || token.length < 6) {
       messageEl.style.display = "block";
       messageEl.style.color = "#c0392b";
-      messageEl.innerText = "لطفاً ایمیل را وارد کنید";
-      return;
-    }
-
-    if (email !== ALLOWED_EMAIL.toLowerCase()) {
-      messageEl.style.display = "block";
-      messageEl.style.color = "#c0392b";
-      messageEl.innerText = "این ایمیل مجاز به ورود نیست";
+      messageEl.innerText = "کد را کامل وارد کنید";
       return;
     }
 
     messageEl.style.display = "block";
     messageEl.style.color = "#772044";
-    messageEl.innerText = "در حال ارسال لینک...";
+    messageEl.innerText = "در حال بررسی کد...";
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.verifyOtp({
       email: email,
-      options: {
-        emailRedirectTo: "https://vailo-shop.vercel.app/admin/",
-        shouldCreateUser: true
-      }
+      token: token,
+      type: "email"
     });
 
     if (error) {
       messageEl.style.color = "#c0392b";
-      messageEl.innerText = "خطا: " + error.message;
+      messageEl.innerText = "کد اشتباه است یا منقضی شده";
     } else {
       messageEl.style.color = "#27ae60";
-      messageEl.innerText = "لینک ورود به ایمیل شما ارسال شد. لطفاً ایمیل را چک کنید.";
+      messageEl.innerText = "ورود موفق!";
+      setTimeout(() => checkAuth(), 800);
     }
   });
 
-  // هنگام بارگذاری صفحه چک کن
   checkAuth();
 
-  // اگر کاربر از لینک ایمیل برگشت، صفحه را رفرش کن
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN") {
-      checkAuth();
-    }
+  supabase.auth.onAuthStateChange((event) => {
+    if (event === "SIGNED_IN") checkAuth();
   });
 </script>
-<!-- ============ پایان لاگین ============ --></html>
+<!-- ============ پایان لاگین ============ -->
