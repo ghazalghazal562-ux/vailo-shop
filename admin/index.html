@@ -53,5 +53,23 @@ document.getElementById('menuItemForm').onsubmit=e=>{e.preventDefault();let labe
     if (event === "SIGNED_IN") checkAuth();
   });
 </script>
-<!-- ============ پایان لاگین ============ --></body>
+<div id="loginOverlay" style="position:fixed;inset:0;background:#fff6fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Vazirmatn,sans-serif;">
+  <div style="background:white;padding:40px 30px;border-radius:20px;box-shadow:0 10px 40px #00000015;max-width:380px;width:90%;text-align:center;">
+    <h2 style="color:#4d122c;margin-bottom:8px;">ورود به پنل ادمین</h2>
+    <p style="color:#947b8a;font-size:14px;margin-bottom:25px;">فقط مدیر اصلی می‌تواند وارد شود</p>
+    
+    <div id="step1">
+      <input id="adminEmail" type="email" placeholder="ایمیل خود را وارد کنید" style="width:100%;padding:14px;border:1px solid #ecdce4;border-radius:12px;margin-bottom:15px;font-size:15px;text-align:center;">
+      <button id="sendMagicLink" style="width:100%;padding:14px;background:#772044;color:white;border:none;border-radius:12px;font-size:15px;cursor:pointer;font-weight:600;">ارسال کد ورود</button>
+    </div>
+
+    <div id="step2" style="display:none;">
+      <p style="font-size:14px;color:#666;margin-bottom:12px;">کد ۶ رقمی را وارد کنید</p>
+      <input id="otpCode" type="text" placeholder="کد ۶ رقمی" maxlength="6" style="width:100%;padding:14px;border:1px solid #ecdce4;border-radius:12px;margin-bottom:15px;font-size:18px;text-align:center;letter-spacing:4px;">
+      <button id="verifyCode" style="width:100%;padding:14px;background:#772044;color:white;border:none;border-radius:12px;font-size:15px;cursor:pointer;font-weight:600;">تأیید و ورود</button>
+    </div>
+    
+    <p id="loginMessage" style="margin-top:18px;font-size:13px;color:#772044;display:none;"></p>
+  </div>
+</div><!-- ============ پایان لاگین ============ --></body>
   
