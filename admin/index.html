@@ -23,50 +23,210 @@ body.authed #adminApp{display:block}
 </style>
 </head>
 <body>
-      token: token,
-      type: 'email'
-    });
-    this.disabled = false;
-    if(error){
-      showMsg('کد اشتباه یا منقضی شده: ' + (error.message || ''));
+<body>
+
+<div id="loginGate">
+  <div class="box">
+    <h2>ورود به پنل ادمین</h2>
+    <p class="sub">کد ورود به ایمیل ادمین ارسال می‌شود.</p>
+
+    <div id="step1">
+      <input id="adminEmail" type="email" placeholder="ایمیل ادمین" autocomplete="email">
+      <button id="sendMagicLink" type="button">ارسال کد ورود</button>
+    </div>
+
+    <div id="step2" style="display:none">
+      <p style="font-size:14px;color:#666;margin:0 0 12px">
+        کد ۶ رقمی ایمیل را وارد کنید
+      </p>
+      <input id="otpCode" type="text" inputmode="numeric"
+        placeholder="کد ورود" maxlength="8" autocomplete="one-time-code">
+      <button id="verifyCode" type="button">تأیید و ورود</button>
+      <button id="backToEmail" class="back" type="button">بازگشت</button>
+    </div>
+
+    <p id="loginMessage" class="msg"></p>
+  </div>
+</div>
+
+<div id="adminApp">
+  <div class="wrap">
+    <div class="panel">
+      <h2>ورود موفق</h2>
+      <p>سیستم ورود فعال است، اما محتوای پنل مدیریت در فایل فعلی وجود ندارد.</p>
+      <button class="btn danger" id="adminLogoutBtn">خروج</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://avgytixrohsizihfmcvq.supabase.co';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2Z3l0aHhyb2hzaGl6aGZtY3ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzUxNjIsImV4cCI6MjExMDk1MTE2Mn0.tdjWuecxM68w1oiiflPMpB5bIQ4slLA-M690NxSyyLk';
+
+const ALLOWED_EMAIL = 'ghazalghazal562@gmail.com';
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const msgEl = document.getElementById('loginMessage');
+const emailInput = document.getElementById('adminEmail');
+const otpInput = document.getElementById('otpCode');
+const sendBtn = document.getElementById('sendMagicLink');
+const verifyBtn = document.getElementById('verifyCode');
+
+function showMsg(text, success = false) {
+  msgEl.textContent = text;
+  msgEl.style.color = success ? '#2e7d4f' : '#772044';
+}
+
+function openAdmin() {
+  document.body.classList.add('authed');
+}
+
+function lockAdmin() {
+  document.body.classList.remove('authed');
+  step1.style.display = 'block';
+  step2.style.display = 'none';
+  otpInput.value = '';
+}
+
+async function checkSession() {
+  try {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) throw error;
+
+    const email = data.session?.user?.email?.toLowerCase();
+
+    if (email === ALLOWED_EMAIL.toLowerCase()) {
+      openAdmin();
       return;
     }
-    const userEmail = (data.user && data.user.email || '').toLowerCase();
-    if(userEmail !== ALLOWED_EMAIL.toLowerCase()){
+
+    if (data.session) {
       await supabase.auth.signOut();
-      showMsg('دسترسی مجاز نیست');
-      lockAdmin();
-      return;
     }
-    showMsg('ورود موفق', true);
-    openAdmin();
-  }catch(err){
-    this.disabled = false;
-    showMsg('خطا: ' + (err.message || err));
+  } catch (error) {
+    console.error('Session error:', error);
+  }
+
+  lockAdmin();
+}
+
+sendBtn.onclick = async function () {
+  const email = emailInput.value.trim().toLowerCase();
+
+  if (!email) {
+    showMsg('ایمیل را وارد کنید');
+    return;
+  }
+
+  if (email !== ALLOWED_EMAIL.toLowerCase()) {
+    showMsg('این ایمیل اجازه ورود ندارد');
+    return;
+  }
+
+  sendBtn.disabled = true;
+  showMsg('در حال ارسال کد...');
+
+  try {
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        shouldCreateUser: true
+      }
+    });
+
+    if (error) throw error;
+
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+    showMsg('کد ارسال شد. Inbox و Spam را بررسی کنید.', true);
+    otpInput.focus();
+
+  } catch (error) {
+    console.error('OTP send error:', error);
+    showMsg('خطا در ارسال کد: ' + error.message);
+  } finally {
+    sendBtn.disabled = false;
   }
 };
 
-document.getElementById('backToEmail').onclick = function(){
+verifyBtn.onclick = async function () {
+  const email = emailInput.value.trim().toLowerCase();
+  const token = otpInput.value.trim();
+
+  if (token.length < 6) {
+    showMsg('کد ورود را کامل وارد کنید');
+    return;
+  }
+
+  verifyBtn.disabled = true;
+  showMsg('در حال بررسی کد...');
+
+  try {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email: email,
+      token: token,
+      type: 'email'
+    });
+
+    if (error) throw error;
+
+    const userEmail = data.user?.email?.toLowerCase();
+
+    if (userEmail !== ALLOWED_EMAIL.toLowerCase()) {
+      await supabase.auth.signOut();
+      lockAdmin();
+      showMsg('دسترسی غیرمجاز');
+      return;
+    }
+
+    showMsg('ورود موفق', true);
+    openAdmin();
+
+  } catch (error) {
+    console.error('OTP verify error:', error);
+    showMsg('کد نامعتبر یا خطا: ' + error.message);
+  } finally {
+    verifyBtn.disabled = false;
+  }
+};
+
+document.getElementById('backToEmail').onclick = function () {
   step2.style.display = 'none';
   step1.style.display = 'block';
+  otpInput.value = '';
   showMsg('');
 };
 
-document.addEventListener('click', async function(e){
-  if(e.target && e.target.id === 'adminLogoutBtn'){
-    await supabase.auth.signOut();
+document.getElementById('adminLogoutBtn').onclick = async function () {
+  await supabase.auth.signOut();
+  lockAdmin();
+  showMsg('خارج شدید');
+};
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') {
     lockAdmin();
+  }
+
+  if (
+    event === 'SIGNED_IN' &&
+    session?.user?.email?.toLowerCase() === ALLOWED_EMAIL.toLowerCase()
+  ) {
+    openAdmin();
   }
 });
 
 checkSession();
-supabase.auth.onAuthStateChange(function(event, session){
-  if(event === 'SIGNED_OUT') lockAdmin();
-  if(event === 'SIGNED_IN' && session && session.user &&
-     session.user.email && session.user.email.toLowerCase() === ALLOWED_EMAIL.toLowerCase()){
-    openAdmin();
-  }
-});
-</script> 
+</script>
 </body>
 </html>
+
+     
