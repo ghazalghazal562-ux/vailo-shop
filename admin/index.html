@@ -29,6 +29,8 @@ body.authed #adminApp{display:block}
     <h2>ورود به پنل ادمین</h2>
     <p class="sub">فقط صاحب فروشگاه می‌تونه وارد بشه. کد به ایمیلت ارسال می‌شه.</p>
     <div id="step1">
+      <button id="githubLogin" type="button" style="margin-bottom:12px;background:#24292e">ورود با GitHub</button>
+      <div style="font-size:12px;color:#947b8a;margin:0 0 12px">یا ورود با کد ایمیل</div>
       <input id="adminEmail" type="email" placeholder="ایمیل ادمین" autocomplete="email">
       <button id="sendMagicLink" type="button">ارسال کد ورود</button>
     </div>
@@ -97,6 +99,19 @@ async function checkSession(){
   lockAdmin();
   return false;
 }
+
+document.getElementById('githubLogin').onclick = async function(){
+  this.disabled = true;
+  showMsg('در حال انتقال به GitHub...');
+  const { error } = await sbAuthClient.auth.signInWithOAuth({
+    provider: 'github',
+    options: { redirectTo: window.location.href.split('#')[0].split('?')[0] }
+  });
+  if(error){
+    this.disabled = false;
+    showMsg('خطا در ورود GitHub: ' + error.message);
+  }
+};
 
 document.getElementById('sendMagicLink').onclick = async function(){
   const email = (emailInput.value || '').trim().toLowerCase();
@@ -174,8 +189,14 @@ sbAuthClient.auth.onAuthStateChange(function(event, session){
   if(event === 'SIGNED_OUT'){
     lockAdmin();
   }
-  if(event === 'SIGNED_IN' && session && session.user && session.user.email && session.user.email.toLowerCase() === ALLOWED_EMAIL.toLowerCase()){
-    openAdmin();
+  if(event === 'SIGNED_IN' && session && session.user){
+    if(session.user.email && session.user.email.toLowerCase() === ALLOWED_EMAIL.toLowerCase()){
+      openAdmin();
+    } else {
+      await sbAuthClient.auth.signOut();
+      lockAdmin();
+      showMsg('این حساب اجازه ورود به پنل را ندارد');
+    }
   }
 });
 
