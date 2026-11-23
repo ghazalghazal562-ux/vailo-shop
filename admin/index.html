@@ -185,7 +185,7 @@ document.addEventListener('click', async function(e){
 });
 
 checkSession();
-sbAuthClient.auth.onAuthStateChange(function(event, session){
+sbAuthClient.auth.onAuthStateChange(async function(event, session){
   if(event === 'SIGNED_OUT'){
     lockAdmin();
   }
